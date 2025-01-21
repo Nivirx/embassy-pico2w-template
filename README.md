@@ -24,17 +24,20 @@ cargo run --release
 
 - A [`probe-rs` installation](https://probe.rs/docs/getting-started/installation/) *or* `ryan-summers:feature/rp2350-flashing` branch of `https://github.com/ryan-summers/probe-rs.git` installed for probe-rs (*currently pending a PR into the probe-rs mainline*)
  *or*
-- the `pico-sdk` and `picotool` package availible, we currently expect it at `/opt/picotool`
+- the [`pico-sdk` repo](https://github.com/raspberrypi/pico-sdk) and [`picotool` repo](https://github.com/raspberrypi/picotool) built, we currently expect the binary at `/opt/picotool`
 
 ## Installation of development dependencies
 
 ```sh
 rustup target install thumbv8m.main-none-eabihf
 cargo install flip-link
+
+
 # Installs the probe-rs tools, including probe-rs run, our recommended default runner
 cargo install --locked probe-rs-tools
-# If you want to use elf2uf2-rs instead, do...
-cargo install --locked elf2uf2-rs
+# or to use a custom git repo (i.e for features not in mainline)
+cargo install --git https://github.com/ryan-summers/probe-rs.git --branch feature/rp2350-flashing probe-rs-tools --locked 
+
 ```
 
 If you get the error ``binary `cargo-embed` already exists`` during installation of probe-rs, run `cargo uninstall cargo-embed` to uninstall your older version of cargo-embed before trying again.
