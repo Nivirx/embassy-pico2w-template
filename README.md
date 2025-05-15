@@ -22,9 +22,9 @@ cargo run --release
 
 - A [`probe-rs` compatible](https://probe.rs/docs/getting-started/probe-setup/) probe
 
-- A [`probe-rs` installation](https://probe.rs/docs/getting-started/installation/) *or* `ryan-summers:feature/rp2350-flashing` branch of `https://github.com/ryan-summers/probe-rs.git` installed for probe-rs (*currently pending a PR into the probe-rs mainline*)
- *or*
-- the [`pico-sdk` repo](https://github.com/raspberrypi/pico-sdk) and [`picotool` repo](https://github.com/raspberrypi/picotool) built, we currently expect the binary at `/opt/picotool`
+- A [`probe-rs` installation](https://probe.rs/docs/getting-started/installation/)
+
+- the [`pico-sdk` repo](https://github.com/raspberrypi/pico-sdk) and [`picotool` repo](https://github.com/raspberrypi/picotool) built.
 
 ## Installation of development dependencies
 
@@ -56,6 +56,27 @@ For a release build
 cargo run --release
 ```
 
+### For a manual build
+
+if you do not want to use all the 'fancy' tooling it is also possible to just use picotool and a thumbv8 rust tool chain.
+
+```sh
+cargo build
+cd target/thumbv8m.main-none-eabihf/debug
+
+# connect your pico2w in bootsel mode for use with picotool and flash if required
+./flashwb_picotool.sh
+
+# convert compiler output (elf) to uf2
+picotool uf2 convert embassy-pico2w-template -t elf embassy-pico2w-template.uf2
+
+# flash uf2 to device and reload to run
+picotool load embassy-pico2w-template.uf2
+picotool reboot
+```
+
+### Logging
+
 If you do not specify a DEFMT_LOG level, it will be set to `debug`.
 That means `println!("")`, `info!("")` and `debug!("")` statements will be printed.
 If you wish to override this, you can change it in `.cargo/config.toml`
@@ -79,6 +100,6 @@ If you wish you use the on-board LED or the WiFi/BT module you will need to flas
 
 For WiFi + Bluetooth firmware
 
-```sh
-./flashwb.sh
-```
+`./flashwb.sh` *or*  `./flashwb_picotool.sh`
+
+you shouldn't need to relash the firmware again unless you erase the EEPROM or accidentally mess with ROM contents past the 3 MiB mark.
