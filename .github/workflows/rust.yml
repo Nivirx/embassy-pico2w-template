@@ -16,6 +16,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: setup thumbv8m
+      run: rustup toolchain install thumbv8m.main-none-eabihf
     - name: Build
       run: cargo build --verbose
     - name: Run tests
