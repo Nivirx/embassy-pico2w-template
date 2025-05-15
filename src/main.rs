@@ -84,7 +84,7 @@ async fn main(spawner: Spawner) {
 
 
     // blink example
-    let loop_delay = Duration::from_secs(10);
+    let loop_delay = Duration::from_secs(5);
     let blink_delay = Duration::from_millis(125);
     loop {
         info!("All done - Waiting in loop!");
